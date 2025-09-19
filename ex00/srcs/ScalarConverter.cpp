@@ -6,7 +6,7 @@
 /*   By: nolecler <nolecler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 13:17:37 by nolecler          #+#    #+#             */
-/*   Updated: 2025/09/19 12:21:00 by nolecler         ###   ########.fr       */
+/*   Updated: 2025/09/19 12:29:25 by nolecler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void ScalarConverter::convert(const std::string &str)
 {
     // quel est le type de l argument passée 
   
-    if (isPseudoLitteral(str))
+    if (isPseudoLiteral(str))
     {
         si str est "nan" ou "+inf" ou "-inf" alors
             afficher "char: impossible"
