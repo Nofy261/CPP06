@@ -6,7 +6,7 @@
 /*   By: nolecler <nolecler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 13:17:30 by nolecler          #+#    #+#             */
-/*   Updated: 2025/09/22 11:12:02 by nolecler         ###   ########.fr       */
+/*   Updated: 2025/09/23 09:45:08 by nolecler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ class ScalarConverter
         static void convert(const std::string &str);
         
         static bool isChar(const std::string &str); //static:pas besoin d instance pour les appeler car classe non instanciable
-        // static bool isInt(const std::string &str);
-        // static bool isFloat(const std::string &str);
+        //static bool isInt(const std::string &str);
+        static bool isFloat(const std::string &str);
         // static bool isDouble(const std::string &str);
-        // static bool isPseudoLiteral(const std::string &str);
+        static bool isPseudoLiteral(const std::string &str);
 
     private :
         ScalarConverter();

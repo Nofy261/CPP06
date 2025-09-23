@@ -6,11 +6,11 @@
 #    By: nolecler <nolecler@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/22 11:14:21 by nolecler          #+#    #+#              #
-#    Updated: 2025/09/22 11:15:03 by nolecler         ###   ########.fr        #
+#    Updated: 2025/09/23 09:03:38 by nolecler         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = scalar
+NAME = convert
 
 CC = c++
 

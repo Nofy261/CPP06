@@ -6,7 +6,7 @@
 /*   By: nolecler <nolecler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 13:17:37 by nolecler          #+#    #+#             */
-/*   Updated: 2025/09/22 11:56:21 by nolecler         ###   ########.fr       */
+/*   Updated: 2025/09/23 12:02:05 by nolecler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,36 +29,98 @@ bool ScalarConverter::isChar(const std::string &str)
     }
 }
 
+bool ScalarConverter::isPseudoLiteral(const std::string &str)
+{
+    if (str == "nan" || str == "+inf" || str == "inf" || str == "-inf")
+    {
+        std::cout << "char: impossible" << std::endl;
+        std::cout << "int: impossible" << std::endl;
+        std::cout << "float: " << str << "f" << std::endl;
+        std::cout << "double: " << str << std::endl;
+        return true;
+    }
+    else if (str == "nanf" || str == "+inff" || str == "inff" || str == "-inff")
+    {
+        std::cout << "char: impossible" << std::endl;
+        std::cout << "int: impossible" << std::endl;
+        std::cout << "float: " << str << std::endl;
+        std::cout << "double: " << str.substr(0, str.length() - 1) << std::endl;
+        return true;
+    }
+    return false;
+}
+
+
+// bool isInt(const std::string &str)
+// {
+    
+// }
+
+//float = 67.0f  65f 
+
+// bool isFloat(const std::string &str)
+// {
+//     int count_dot = 0;
+    
+//     for (int j = 0; j < str.size(); j++)
+//     {
+//         if (str[j] == '.')
+//             count_dot++;
+//     }
+//     if (count_dot > 1)
+//         return false;
+//     for (int i = 0; i < str.size(); i++)
+//     {
+//         if (!isdigit(str[0]))
+//             return false;
+        
+//         // si str[i] n est pas un point n est pas un chiffre et n'est pas le dernier caractere
+//         if (!isdigit(str[i]) && str[i] != '.' && str[i] != str.length() - 1)
+//             return false;
+        
+//         // si le dernier caract n'est pas un f
+//         if (str.length() - 1 != 'f')
+//             return false;
+//     }
+//     return true;
+// }
+
+
+// 56.f
+// float x = .5f == 0.5f CAS VALIDE A GERER 
+
+bool isFloat(const std::string &str)
+{
+    if (str.size() <= 1)
+        return false;
+    if (str[str.length() - 1] != 'f')
+        return false;
+    if (!isdigit(str[0]) && str[0] != '+' && str[0] != '-')
+        return false;
+        
+    std::string s = str.substr(0, str.length() - 1); // on enleve le f en dernier
+       
+    int count_dot = 0;   
+    for (int i = 0; i < s.length(); i++)
+    {
+        if (s[i] == '.')
+            count_dot++;       
+        if (count_dot > 1)
+            return false;
+        if (!isdigit(s[i]) && s[i] != '.')
+            return false;
+    }
+    return true; 
+}
 
 
 void ScalarConverter::convert(const std::string &str)
-{
-    // quel est le type de l argument passée 
+{ 
   
-    // if (isPseudoLiteral(str))
-    // {
-    //     si str est "nan" ou "+inf" ou "-inf" alors
-    //         afficher "char: impossible"
-    //         afficher "int: impossible"
-    //         afficher "float: <valeur correspondante suivie de f>"
-    //         afficher "double: <valeur>"
-    //     sinon si str est "nanf" ou "+inff" ou "-inff" alors
-    //         afficher "char: impossible"
-    //         afficher "int: impossible"
-    //         afficher "float: <valeur>"
-    //         afficher "double: <valeur sans le f>"
-    // }
-    if (isChar(str))
+    if (isPseudoLiteral(str))
+        return;
+    else if (isChar(str))
     {
-        // -on verifie le nombre de caractere :
-        //     -->si str.length() != 1
-        //         -> message de conversion impossible pout tout
-        //     -->si str.length() == 1  (ex : 'A')
-        //         -> on l affiche en char  (char = 'A')
-        //         -> on convertit en int et on affiche la valeur en int (int = 65 voir ascii)
-        //         -> on convertit le int en float et affiche le float (float = 65.0f)
-        //         -> on convertit le int en double et affiche le double (double = 65.0)
-
         if (isprint(str[0]))
         {
             std::cout << "char: " << str << std::endl;
@@ -66,7 +128,7 @@ void ScalarConverter::convert(const std::string &str)
             std::cout << "float: " << static_cast<float>(str[0]) << ".0f" << std::endl;
             std::cout << "double: " << static_cast<double>(str[0]) << ".0" << std::endl;
         }
-        else if (!isprint(str[0]))
+        else if (!isprint(str[0])) // a tester tout les cas
         {
             std::cout << "char: Non displayable" << std::endl;
             std::cout << "int: " << static_cast<int>(str[0]) << std::endl;
@@ -86,23 +148,28 @@ void ScalarConverter::convert(const std::string &str)
     //         -->si non : messsage conversion impossible
     //     *on le convertit en float et on affiche le resultat en rajoutant le "f" a la fin.
     //     *on le convertit en double et -------*------*---------
-    //     // int x = 5;
-    //     // double y = static_cast<double>(x);
-    // }
-    // else if (isFloat(str)) ex : 42.0f
+        // int x = 5;
+        // double y = static_cast<double>(x);
+    //}
+    // else if (isFloat(str)) //ex : 42.0f
     // {
-    //     - Convertir str en float
-    //     - char:
-    //         - Si dans la plage [0, 127]
-    //             - Si affichable : afficher
-    //             - Sinon : "Non displayable"
-    //         - Sinon : "impossible"
-    //     - int:
-    //         - Si valeur = nanf ou inff → "impossible"
-    //         - Si dans INT_MIN/INT_MAX → afficher (tronqué)
-    //         - Sinon → "impossible"
-    //     - double:
-    //         - Toujours possible → afficher  
+    //     std::cout << "char: " << 
+
+
+
+        
+    //     // - Convertir str en float
+    //     // - char:
+    //     //     - Si dans la plage [0, 127]
+    //     //         - Si affichable : afficher
+    //     //         - Sinon : "Non displayable"
+    //     //     - Sinon : "impossible"
+    //     // - int:
+    //     //     - Si valeur = nanf ou inff → "impossible"
+    //     //     - Si dans INT_MIN/INT_MAX → afficher (tronqué)
+    //     //     - Sinon → "impossible"
+    //     // - double:
+    //     //     - Toujours possible → afficher  
     // }
     // else if (isDouble(str))
     // {
