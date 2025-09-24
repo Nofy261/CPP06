@@ -6,7 +6,7 @@
 /*   By: nolecler <nolecler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 13:17:37 by nolecler          #+#    #+#             */
-/*   Updated: 2025/09/24 14:48:00 by nolecler         ###   ########.fr       */
+/*   Updated: 2025/09/24 16:12:05 by nolecler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,12 @@ static bool isChar(const std::string &str)
     
 // }
 
-//float = 67.0f  65f 
+ 
 
-// 56.f
+
 // float x = .5f == 0.5f CAS VALIDE A GERER 
-
+// ./convert .5f cas a gerer ?? 
+// a tester ++ -- +. -.
 static bool isFloat(const std::string &str)
 {
     if (str.size() <= 1)
@@ -64,25 +65,63 @@ static bool isFloat(const std::string &str)
     if (str[str.length() - 1] != 'f')
         return false;
     if (!isdigit(str[0]) && str[0] != '+' && str[0] != '-')
+    {
+        std::cout << "Error 1: Invalid float" << std::endl;
         return false;
-        
+    }
+ 
     std::string s = str.substr(0, str.length() - 1); // on enleve le f en dernier
        
     int count_dot = 0;   
-    for (unsigned long int i = 0; i < s.length(); i++)
+    for (unsigned long int i = 1; i < s.length(); i++) // on commence a 1 car on a defa validé ou pas le 1er caractere
     {
         if (s[i] == '.')
             count_dot++;       
         if (count_dot > 1)
             return false;
-        if (!isdigit(s[i]) && s[i] != '.' && str[0] != '+' && str[0] != '-')
+        if (!isdigit(s[i]) && s[i] != '.') // && str[0] != '+' && str[0] != '-')
+        {
+            std::cout << "Error 2: Invalid float" << std::endl;
             return false;
-    } 
+        }
+    }
     return true; 
 }
 
-// static bool isDouble(const std::string &str)
-//{}
+
+// s'il y a un point mais pas de f
+// a gerer +. ou -. ou ++ -- invalide
+static bool isDouble(const std::string &str)
+{
+    if (str.size() <= 1)
+        return false;
+    if (!isdigit(str[0]) && str[0] != '+' && str[0] != '-')
+    {
+        std::cout << "Error 1: Invalid double" << std::endl;
+        return false;
+    }
+    
+    if ((str[0] == '+' || str[0] == '-') && (!isdigit(str[1])))
+    {
+        std::cout << "Error 2: Invalid double" << std::endl;
+        return false;
+    }
+    
+    int count_dot = 0;   
+    for (unsigned long int i = 1; i < str.size(); i++) // on commence a 1 car on a defa validé ou pas le 1er caractere
+    {
+        if (str[i] == '.')
+            count_dot++;       
+        if (!isdigit(str[i]) && str[i] != '.')
+        {
+            std::cout << "Error 3: Invalid double" << std::endl;
+            return false;
+        }
+    }
+    if (count_dot != 1)
+        return false;
+    return true; 
+}
 
 
 void ScalarConverter::convert(const std::string &str)
@@ -146,14 +185,26 @@ void ScalarConverter::convert(const std::string &str)
         std::cout << "float: " << str << std::endl;
         std::cout << "double: " << std::fixed << std::setprecision(1) << static_cast<double>(f) << std::endl;
     }
-    // else if (isDouble(str))
-    // {
-    //     - Convert str en double
-    //     - char:
-    //         - Si dans [0,127]
-    //             -Si affichable → afficher
-    //             - Sinon → "Non displayable"
-    //         - Sinon → "impossible"
+    else if (isDouble(str)) // A TESTER , A GERER NAN et INF
+    {
+        std::stringstream ssd(str);
+        double d;
+        ssd >> d;
+
+        if (d < 0 || d > 127)
+            std::cout << "char: impossible" << std::endl; 
+        else if (d < 32 || d == 127)
+            std::cout << "char: Non displayable" << std::endl;
+        else      
+            std::cout << "char: " << static_cast<char>(d) << std::endl;
+
+        if (d > std::numeric_limits<int>::max() || d < std::numeric_limits<int>::min())
+            std::cout << "int: impossible" << std::endl; 
+        else
+            std::cout << "int: " << static_cast<int>(d) << std::endl;
+
+        std::cout << "float: " << std::fixed << std::setprecision(1) << static_cast<float>(d) << std::endl;
+        std::cout << "double: " << std::fixed << std::setprecision(1) << static_cast<double>(d) << std::endl;
     //     - int:
     //         - Si nan / inf → "impossible"
     //         - Si dans INT range → afficher (tronqué)
@@ -162,7 +213,7 @@ void ScalarConverter::convert(const std::string &str)
     //         - Toujours possible → afficher avec .0f si besoin
     //     - double:
     //         - Affichage direct (avec .0 si pas de décimale) 
-    // }
+    }
     // else
     // {
     //     std::cout << "Invalid literal." << std::endl;
