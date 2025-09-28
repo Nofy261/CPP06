@@ -16,7 +16,9 @@ CC = c++
 
 CFLAGS = -Wall -Werror -Wextra -Iincludes -std=c++98
 
-SRC := srcs/main.cpp
+
+SRC := srcs/Base.cpp \
+	srcs/main.cpp
 
 OBJ := $(SRC:.cpp=.o)
 
