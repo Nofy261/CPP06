@@ -6,7 +6,7 @@
 /*   By: nolecler <nolecler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 13:17:37 by nolecler          #+#    #+#             */
-/*   Updated: 2025/09/26 13:01:58 by nolecler         ###   ########.fr       */
+/*   Updated: 2025/09/30 11:17:16 by nolecler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,24 @@
 #include <cstdlib>
 #include <iomanip>
 #include <limits>
+#include <climits> 
 #include <sstream>
 #include <cerrno>
 
+ScalarConverter::ScalarConverter(){}
+
+ScalarConverter::ScalarConverter(const ScalarConverter& copy)
+{
+    *this = copy;
+}
+
+ScalarConverter& ScalarConverter::operator=(const ScalarConverter& other)
+{
+    (void)other;
+    return (*this);
+}
+
+ScalarConverter::~ScalarConverter(){}
 
 static bool isPseudoLiteral(const std::string &str) 
 {
@@ -64,7 +79,6 @@ bool isInt(const std::string &str)
         std::cout << "Error 1: Value is invalid ." << std::endl;
         return false;
     }
-   
     if (c > INT_MAX || c < INT_MIN)
     {
         std::cout << "Error 2: Value is out of range for int." << std::endl;
@@ -73,7 +87,6 @@ bool isInt(const std::string &str)
     return true;
 }
 
-// float x = .5f == 0.5f CAS VALIDE A GERER OU PAS
 
 static bool isFloat(const std::string &str)
 {
@@ -81,7 +94,6 @@ static bool isFloat(const std::string &str)
         return false;
     if (str[str.length() - 1] != 'f')
         return false;
-
     unsigned long int i = 0;
     while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
 		i++;    
@@ -114,7 +126,6 @@ static bool isDouble(const std::string &str)
 {
     if (str.size() <= 1)
         return false;
-
     unsigned long int i = 0;
     while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
 		i++;    
@@ -125,7 +136,6 @@ static bool isDouble(const std::string &str)
         return false;
     if (isdigit(str[i - 1]) && (str[i] != '.' && !isdigit(str[i])))
         return false;
-    
     unsigned long int count_dot = 0;
     while (i < str.size())
     {
@@ -142,7 +152,6 @@ static bool isDouble(const std::string &str)
 
 void ScalarConverter::convert(const std::string &str)
 { 
-  
     if (isPseudoLiteral(str))
         return;
     else if (isChar(str))
@@ -151,15 +160,15 @@ void ScalarConverter::convert(const std::string &str)
         {
             std::cout << "char: " << str << std::endl;
             std::cout << "int: " << static_cast<int>(str[0]) << std::endl;
-            std::cout << "float: " << static_cast<float>(str[0]) << ".0f" << std::endl;
-            std::cout << "double: " << static_cast<double>(str[0]) << ".0" << std::endl;
+            std::cout << "float: " << std::fixed << std::setprecision(1) << static_cast<float>(str[0]) << "f" <<std::endl;
+            std::cout << "double: " << std::fixed << std::setprecision(1) << static_cast<double>(str[0]) << std::endl;
         }
         else if (!isprint(str[0]))
         {
             std::cout << "char: Non displayable" << std::endl;
             std::cout << "int: " << static_cast<int>(str[0]) << std::endl;
-            std::cout << "float: " << static_cast<float>(str[0]) << ".0f" << std::endl;
-            std::cout << "double: " << static_cast<double>(str[0]) << ".0" << std::endl;
+            std::cout << "float: " << std::fixed << std::setprecision(1) << static_cast<float>(str[0]) << "f" <<std::endl;
+            std::cout << "double: " << std::fixed << std::setprecision(1) << static_cast<double>(str[0]) << std::endl;
         }
     }
     else if (isInt(str))
@@ -176,7 +185,6 @@ void ScalarConverter::convert(const std::string &str)
         std::cout << "float: " << std::fixed << std::setprecision(1) << static_cast<float>(c) << "f" <<std::endl;
         std::cout << "double: " << std::fixed << std::setprecision(1) << static_cast<double>(c) << std::endl;
     }
-    
     else if (isFloat(str))
     {
         std::string s = str.substr(0, str.length() - 1); 
@@ -186,9 +194,9 @@ void ScalarConverter::convert(const std::string &str)
             std::cout << "char: impossible" << std::endl; 
         else if (f < 32 || f == 127)
             std::cout << "char: Non displayable" << std::endl;
-        else      
+        else
             std::cout << "char: " << static_cast<char>(f) << std::endl;
-            
+        
         std::stringstream ssd(s);
         double d;
         ssd >> d;
@@ -197,7 +205,6 @@ void ScalarConverter::convert(const std::string &str)
             std::cout << "int: impossible" << std::endl; 
         else
             std::cout << "int: " << static_cast<int>(d) << std::endl;
-
         std::cout << "float: " << std::fixed << std::setprecision(1) << static_cast<float>(f) << "f" <<std::endl;
         std::cout << "double: " << std::fixed << std::setprecision(1) << static_cast<double>(f) << std::endl;
     }
